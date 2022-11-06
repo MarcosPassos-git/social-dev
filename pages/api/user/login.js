@@ -1,4 +1,4 @@
-import Joi from 'joi'
+
 import {withIronSessionApiRoute} from 'iron-session/next'
 
 import createHandler from '../../../lib/middlewares/nextConnect'
@@ -27,4 +27,4 @@ handler.post(validate({body: loginSchema}), async (req, res) => {
     }
 })
 
-export default withIronSessionApiRoute (handler, ironConfig)
+export default withIronSessionApiRoute(handler, ironConfig)

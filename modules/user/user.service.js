@@ -1,6 +1,6 @@
 import { hashPassword, comparePassword } from "../../utils/bcrypt"
 
-import User from './user.modules'
+import User from './user.model'
 
 export const signupUser = async (body) => {
     try {
