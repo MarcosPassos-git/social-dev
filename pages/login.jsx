@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import {useForm} from 'react-hook-form'
@@ -35,8 +36,11 @@ function LoginPage () {
         resolver: joiResolver(loginSchema)
     }) 
 
+    const [loading, setLoading] = useState(false)
+
     const onSubmit = async (data) => {
         try {
+            setLoading(true)
             const {status} = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user/login`, data)
             if (status === 200) {
                 router.push('/')
@@ -52,9 +56,11 @@ function LoginPage () {
                     message: 'Usuário ou email não encontrado.'
                 })
             }
-            console.log(response.data)
+            
+        } finally {
+            setLoading(false)
         }
-    }
+    } 
 
     return (
         <ImageWithSpace>
@@ -65,7 +71,7 @@ function LoginPage () {
                 <Form onSubmit={handleSubmit(onSubmit)} >
                     <Input label="Email ou usuário" name="userOrEmail" control={control} />
                     <Input label="Senha" type="password" name="password" control={control} />
-                    <Button loading={true} type="submit" disabled={Object.keys(errors).length > 0}>Entrar</Button>
+                    <Button loading={loading} type="submit" disabled={Object.keys(errors).length > 0}>Entrar</Button>
                 </Form>
                 <Text>Não possui uma conta? <Link href='/Signup'>Faça seu cadastro</Link></Text>
             </FormContainer>

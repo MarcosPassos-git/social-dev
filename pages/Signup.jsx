@@ -36,10 +36,13 @@ function SignupPage () {
     const router = useRouter()
     const {control, handleSubmit, formState: {errors}, setError } = useForm({
         resolver: joiResolver(signupSchema)
-    })        
+    }) 
+    
+    const [loading, setLoading] = useState(false)
 
     const handleForm = async (data) => {
        try {
+        setLoading(true)
         const {status} = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user/signup`, data)
         if (status === 201) {
             router.push('/')
@@ -51,7 +54,9 @@ function SignupPage () {
             })
         }
 
-       }
+       } finally {
+        setLoading(false)
+    }
     }
 
         
@@ -67,7 +72,7 @@ function SignupPage () {
                     <Input label="Usuário" name="user"control={control} />
                     <Input label="Email" type="email" name="email" control={control} />
                     <Input label="Senha" type="password" name="password" control={control} />
-                    <Button type="submit" disabled={Object.keys(errors).length > 0}>Cadastrar</Button>
+                    <Button loading={loading} type="submit" disabled={Object.keys(errors).length > 0}>Cadastrar</Button>
                 </Form>
                 <Text>Já possui uma conta? <Link href='/login'>Faça seu login</Link></Text>
             </FormContainer>
